@@ -1,0 +1,48 @@
+services:
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      tags:
+        - api_logistica:latest
+    command: sh -c "python manage.py makemigrations && 
+                    python manage.py migrate && 
+                    gunicorn project.wsgi:application --bind 0.0.0.0:${APP_PORT}"
+    container_name: api_logistica_web
+    depends_on:
+      - db
+    env_file:
+      - .env
+    environment:
+      DATABASE_URL: postgres://${POSTGRES_USER}:${POSTGRES_PASSWORD}@db:5432/${DB_NAME}
+    image: api_logistica:latest
+    networks:
+      - api_logistica
+    ports:
+      - ${APP_PORT}:${APP_PORT}
+    restart: on-failure
+    volumes:
+      - api_logistica:/data
+  db:
+    container_name: api_logistica_db
+    environment:
+      - DB_NAME=${DB_NAME}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+      - PGPORT=5432
+      - POSTGRES_USER=${POSTGRES_USER}
+    restart: on-failure
+    image: postgres:12.15-alpine3.18
+    networks:
+      - api_logistica
+    volumes:
+      - ./db:/docker-entrypoint-initdb.d
+      - api_logistica:/var/lib/postgresql/data
+
+networks:
+  api_logistica:
+    name: api_logistica
+    driver: bridge
+
+volumes:
+  api_logistica:
+    name: "api_logistica"
