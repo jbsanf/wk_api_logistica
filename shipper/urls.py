@@ -1,7 +1,7 @@
 from rest_framework import routers
-from .viewsets import ShipperViewSet
+from .viewsets import ShipmentViewSet
 router = routers.SimpleRouter()
 
-router.register(r'shippers', ShipperViewSet)
+router.register(r'shippers', ShipmentViewSet)
 
 urlpatterns = router.urls

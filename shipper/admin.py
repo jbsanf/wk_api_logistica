@@ -1,6 +1,11 @@
 from django.contrib import admin
 
-from .models import Shipper
+from .models import Shipment, Shipper
+
+
+@admin.register(Shipment)
+class ShipmentAdmin(admin.ModelAdmin):
+    pass
 
 
 @admin.register(Shipper)
