@@ -30,7 +30,7 @@ DEBUG = os.getenv('DEBUG', '') == '1'
 
 ALLOWED_HOSTS = ['*']
 
-CSRF_TRUSTED_ORIGINS = [os.getenv('HOST').split(',')]
+CSRF_TRUSTED_ORIGINS = os.getenv('HOST').split(',')
 
 # Application definition
 
